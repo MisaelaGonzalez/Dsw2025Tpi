@@ -36,7 +36,7 @@ public class ProductsManagementService : IProductsManagementService
             product.CurrentUnitPrice,
             product.InternalCode,
             product.Description,
-            product.StockCuantity,
+            product.StockQuantity,
             product.IsActive
         );
 
@@ -59,7 +59,7 @@ public class ProductsManagementService : IProductsManagementService
         p.CurrentUnitPrice,
         p.InternalCode,
         p.Description,
-        p.StockCuantity,
+        p.StockQuantity,
         p.IsActive
          )).ToList();
     
@@ -70,22 +70,22 @@ public class ProductsManagementService : IProductsManagementService
     {
         if (string.IsNullOrWhiteSpace(request.Sku) ||
             string.IsNullOrWhiteSpace(request.InternalCode) ||
-            string.IsNullOrWhiteSpace(request.Descripcion) ||
+            string.IsNullOrWhiteSpace(request.Description) ||
             string.IsNullOrWhiteSpace(request.Name) ||
             
-            request.Stock < 0)
+            request.StockQuantity < 0)
         {
             throw new ArgumentException("Valores para el producto no validos");
         }
         //VALIDACIONES
-        if (request.Price <= 0) throw new PriceNullException("El precio del producto no puede ser cero o menor.");
+        if (request.CurrentUnitPrice <= 0) throw new PriceNullException("El precio del producto no puede ser cero o menor.");
         var exist = await _repository.First<Product>(p => p.Sku == request.Sku);
         if (exist != null) throw new DuplicatedEntityException($"Ya existe un producto con el Sku {request.Sku}");
 
-        var product = new Product(request.Sku, request.InternalCode, request.Name, request.Descripcion, request.Price, request.Stock);
+        var product = new Product(request.Sku, request.InternalCode, request.Name, request.Description, request.CurrentUnitPrice, request.StockQuantity);
 
         await _repository.Add(product);
-        return new ProductModel.ProductResponse(product.Id, product.Sku, product.Name, product.CurrentUnitPrice, product.InternalCode, product.Description, product.StockCuantity);
+        return new ProductModel.ProductResponse(product.Id, product.Sku, product.Name, product.CurrentUnitPrice, product.InternalCode, product.Description, product.StockQuantity);
     }
 
     // Deshabilitar un producto por ID
@@ -112,16 +112,16 @@ public class ProductsManagementService : IProductsManagementService
                 string.IsNullOrWhiteSpace(request.Sku) ||
                 string.IsNullOrWhiteSpace(request.InternalCode) ||
                 string.IsNullOrWhiteSpace(request.Name) ||
-                request.Price <= 0) 
+                request.CurrentUnitPrice <= 0) 
             throw new ArgumentException("Valores para el producto no validos");
 
         // Actualiza los campos de la entidad
         product.Sku = request.Sku;
         product.InternalCode = request.InternalCode;
         product.Name = request.Name;
-        product.Description = request.Descripcion;
-        product.CurrentUnitPrice = request.Price;
-        product.StockCuantity = request.Stock;
+        product.Description = request.Description;
+        product.CurrentUnitPrice = request.CurrentUnitPrice;
+        product.StockQuantity = request.StockQuantity;
 
         // Guarda los cambios
         await _repository.Update(product);
@@ -134,7 +134,7 @@ public class ProductsManagementService : IProductsManagementService
             product.CurrentUnitPrice,
             product.InternalCode,
             product.Description,
-            product.StockCuantity,
+            product.StockQuantity,
             product.IsActive
         );
     }

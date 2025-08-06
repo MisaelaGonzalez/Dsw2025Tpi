@@ -66,7 +66,7 @@ namespace Dsw2025Tpi.Application.Services
                     throw new EntityNotFoundException($"Producto con ID {item.ProductId} no encontrado.");
                 //if (item.Description != product.Description || item.Name != product.Name)
                   //  throw new ArgumentException("Datos de descripcion o nombre no coincidentes");
-                if (product.StockCuantity < item.Quantity)
+                if (product.StockQuantity < item.Quantity)
                     throw new ArgumentException($"No hay suficiente stock para el producto {product.Name}.");
                 if (item.Quantity <= 0)
                     throw new ArgumentException($"La cantidad del producto debe ser mayor a 0.");

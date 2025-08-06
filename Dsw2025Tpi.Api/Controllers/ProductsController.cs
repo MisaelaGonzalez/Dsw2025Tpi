@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 namespace Dsw2025Tpi.Api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("api/products")]
     public class ProductsController : ControllerBase
     {
