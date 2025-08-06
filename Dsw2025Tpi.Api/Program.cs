@@ -26,7 +26,7 @@ public class Program
         builder.Services.AddScoped<IProductsManagementService, ProductsManagementService>();
         builder.Services.AddScoped<IOrderManagementService, OrderManagement>();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddTransient<IRepository, EfRepository>(); // le paso la interface y luego la clase que implementa esa interface
+        builder.Services.AddTransient<IRepository, EfRepository>(); 
         builder.Services.AddSwaggerGen(o =>
         {
             o.SwaggerDoc("v1", new OpenApiInfo

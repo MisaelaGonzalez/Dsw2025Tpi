@@ -3,8 +3,7 @@
     [Serializable]
     public class EntityNotFoundException : Exception
     {
-        //Se lanza cuando no se encuentra una entidad buscada
-        //(por ejemplo, buscar un cliente por ID que no existe).
+        
         public EntityNotFoundException()
         {
         }

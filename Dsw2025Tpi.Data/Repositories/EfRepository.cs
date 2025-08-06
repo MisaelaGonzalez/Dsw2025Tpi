@@ -6,11 +6,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Dsw2025Tpi.Data.Repositories;
 
-// Implementaciones de los repositorios que usan tus entidades para acceder a la base de datos,
-// normalmente siguiendo el patrón Repository.
-// EFRepository.cs es probablemente una clase que implementa la interfaz
-// IRepository que mostraste antes, y maneja: Add, Update, Delete, GetById, GetAll, etc.
-// Este patrón permite aislar la lógica de acceso a datos del resto del código.
+
 public class EfRepository: IRepository
 {
     private readonly Dsw2025TpiContext _context;

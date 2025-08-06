@@ -12,11 +12,10 @@ using static Azure.Core.HttpHeader;
 using static Dsw2025Tpi.Application.Dtos.OrderModel;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-// Contiene la lógica de negocio. Es la capa intermedia entre los controladores
-// (si usás Web API) y los datos (repositorio/basededatos).
+
 namespace Dsw2025Tpi.Application.Services
 {
-    // Este código implementa la lógica de negocio para agregar una nueva orden de compra (pedido) en una aplicación
+    
     public class OrderManagement : IOrderManagementService
     {
         private readonly IRepository _repository;
@@ -27,8 +26,6 @@ namespace Dsw2025Tpi.Application.Services
 
         public async Task<OrderModel.OrderResponse> AddOrder(OrderModel.OrderRequest request)
         {
-            // Verifica que: Se haya proporcionado un ID de cliente válido.
-            // Las direcciones de envío y facturación no estén vacías.
           
             if (request.CustomerId == Guid.Empty ||
                 string.IsNullOrWhiteSpace(request.ShippingAddress) ||
@@ -44,19 +41,12 @@ namespace Dsw2025Tpi.Application.Services
 
             // Validar existencia del cliente
             var customer = await _repository.GetById<Customer>(request.CustomerId);
-            if (customer == null) // si el cliente no existe lanza excepcion
+            if (customer == null) 
                 throw new EntityNotFoundException($"Cliente no encontrado.");
 
             // validaciones
             foreach (var item in request.OrderItems)
             {
-                /* Por cada producto en la orden, valida:
-                    Que el producto exista.
-                    Que esté activo (IsActive == true).
-                    Que el precio enviado coincida con el actual.
-                    Que nombre y descripción coincidan.
-                    Que haya suficiente stock.
-                   Que cantidad y precio sean mayores a cero.*/
                 var product = await _repository.GetById<Product>(item.ProductId);
                 if (product.IsActive == false)
                     throw new ArgumentException("Producto no disponible, campo IsActive false");
@@ -72,37 +62,31 @@ namespace Dsw2025Tpi.Application.Services
                     throw new ArgumentException($"La cantidad del producto debe ser mayor a 0.");
                 //if (item.CurrentUnitPrice <= 0)
                   //  throw new ArgumentException($"El precio del producto {item.Name} debe ser mayor a 0.");
-                else // Si pasa todas las validaciones:
-                   // Se resta el stock del producto y se actualiza en la base de datos.
+                else 
                 {
-                    product.RestarStock(item.Quantity); // Restar la cantidad del producto del stock
+                    product.RestarStock(item.Quantity); 
                     await _repository.Update(product);
                 }
 
             }
 
-            // crea objetos de tipo OrderItem con los datos del producto y los agrega a la lista.            
+                      
             var orderItems = new List<OrderItem>();
-            //Crear los items de la orden
+            
             foreach (var item in request.OrderItems)
             {
                 var product = await _repository.GetById<Product>(item.ProductId);
                 var orderItem = new OrderItem(product.Id, item.Quantity, product.CurrentUnitPrice);
                 orderItems.Add(orderItem);
             }
-            // Usa el cliente, las direcciones y los OrderItems para crear un nuevo objeto Order.
-            //Estado inicial: Pending.
-            // Crear la orden
+            
             var order = new Order(customer.Id, request.ShippingAddress, request.BillingAddress,
             orderItems, DateTime.UtcNow, OrderStatus.Pending);
 
             // Guarda la orden en la base de datos.
             var added = await _repository.Add(order);
 
-            // Devuelve un OrderModel.OrderResponse con:
-            // IDs, direcciones, fecha, estado.
-            // El total.
-            // La lista de ítems de la orden convertidos a OrderItemResponse.
+           
             return new OrderModel.OrderResponse(
                 added.Id,
                 added.CustomerId,

@@ -70,6 +70,7 @@ namespace Dsw2025Tpi.Api.Controllers
             }
         }
 
+        //Obtener orden por id
         [HttpGet("{id:Guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
@@ -88,6 +89,7 @@ namespace Dsw2025Tpi.Api.Controllers
             }
         }
 
+        //Modificar estado de una orden
         [Authorize]
         [HttpPut("{id}/status")]
         public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] OrderModel.StatusUpdateRequest request)

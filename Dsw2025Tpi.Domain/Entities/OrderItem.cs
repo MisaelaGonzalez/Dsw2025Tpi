@@ -9,7 +9,7 @@ namespace Dsw2025Tpi.Domain.Entities
 {
     public class OrderItem : EntityBase
     {
-        // constructor vacío requerido por Entity Framework para poder instanciar objetos desde la base de datos.
+        
         public OrderItem()
         {
             

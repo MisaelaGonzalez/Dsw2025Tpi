@@ -41,8 +41,6 @@ namespace Dsw2025Tpi.Domain.Entities
         public string? BillingAddress { get; set; }
         public string? Notes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        // Propiedad calculada: suma de los subtotales de cada ítem.
-        // No se guarda en la base, se calcula al momento de leer el objeto.
         public decimal TotalAmount => OrderItems.Sum(item => item.Subtotal);
 
         //Forean Key Customer
@@ -51,8 +49,7 @@ namespace Dsw2025Tpi.Domain.Entities
 
         //Order Items
         public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
-        // Relación 1:N → un pedido tiene varios ítems (OrderItem).
-        // OrderItems contiene los productos comprados, sus precios y cantidades.
+        
 
     }
 }

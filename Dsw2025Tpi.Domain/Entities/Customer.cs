@@ -23,8 +23,7 @@ namespace Dsw2025Tpi.Domain.Entities
 
         //Orders
         public ICollection<Order>? Orders { get; set; }
-        // Es una relación 1 a muchos: un cliente puede tener muchos pedidos (Order).
-        //ICollection<Order> se usa como colección navegable.
+        
 
 
     }

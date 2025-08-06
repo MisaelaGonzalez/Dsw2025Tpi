@@ -3,7 +3,7 @@
    
     public class PriceNullException : Exception
     {
-        // Probablemente se lanza cuando un producto no tiene precio asignado (precio nulo o inválido).
+        
         public PriceNullException()
         {
         }
