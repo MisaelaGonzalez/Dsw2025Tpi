@@ -1,9 +1,16 @@
 ﻿using Dsw2025Tpi.Domain.Entities;
 using Dsw2025Tpi.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Dsw2025Tpi.Data.Repositories;
 
+// Implementaciones de los repositorios que usan tus entidades para acceder a la base de datos,
+// normalmente siguiendo el patrón Repository.
+// EFRepository.cs es probablemente una clase que implementa la interfaz
+// IRepository que mostraste antes, y maneja: Add, Update, Delete, GetById, GetAll, etc.
+// Este patrón permite aislar la lógica de acceso a datos del resto del código.
 public class EfRepository: IRepository
 {
     private readonly Dsw2025TpiContext _context;
@@ -54,6 +61,8 @@ public class EfRepository: IRepository
         return entity;
     }
 
+   
+
     private static IQueryable<T> Include<T>(IQueryable<T> query, string[] includes) where T : EntityBase
     {
         var includedQuery = query;
@@ -64,4 +73,17 @@ public class EfRepository: IRepository
         }
         return includedQuery;
     }
+
+    public async Task<IEnumerable<T>> GetAll<T>(string includeProperties = "") where T : class
+    {
+        IQueryable<T> query = _context.Set<T>();
+
+        foreach (var includeProperty in includeProperties.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+        {
+            query = query.Include(includeProperty.Trim());
+        }
+
+        return await query.ToListAsync();
+    }
+
 }
